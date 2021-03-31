@@ -17,16 +17,22 @@ loginBtn.click()
 print("Logging in...")
 time.sleep(10)
 
-get_user = input("Enter username whose profile picture you want: ")
-# driver.get(r"https://www.instagram.com/aliaabhatt/")
-driver.get(fr"https://www.instagram.com/{get_user}/")
-body = driver.find_element_by_tag_name('body')
-page = body.get_attribute("innerHTML")
+i = 0
+while True:
+    get_user = input("Enter username whose profile picture you want: ")
+    # driver.get(r"https://www.instagram.com/aliaabhatt/")
+    driver.get(fr"https://www.instagram.com/{get_user}/")
+    body = driver.find_element_by_tag_name('body')
+    page = body.get_attribute("innerHTML")
 
-soup = BeautifulSoup(page, "html.parser")
-userImageTag = soup.select(f'img[alt="{get_user}\'s profile picture"]')
-if not userImageTag:
-    userImageTag = soup.select('.be6sR')
-print(userImageTag[0]["src"])
-request.urlretrieve(userImageTag[0]["src"], "userprofile.jpg")
-driver.close()
+    soup = BeautifulSoup(page, "html.parser")
+    userImageTag = soup.select(f'img[alt="{get_user}\'s profile picture"]')
+    if not userImageTag:
+        userImageTag = soup.select('.be6sR')
+    print(userImageTag[0]["src"])
+    request.urlretrieve(userImageTag[0]["src"], f"userprofile{i}.jpg")
+    i += 1
+    end = input("Enter exit to exit the program else just press any other key: ")
+    if end == 'exit':
+        driver.close()
+        break
